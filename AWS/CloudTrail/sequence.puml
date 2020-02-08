@@ -1,0 +1,32 @@
+@startuml Basic usage - Stream processing with Azure Stream Analytics
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/master/dist
+!includeurl AWSPuml/AWSCommon.puml
+'!includeurl AWSPuml/AWSSimplified.puml
+
+'AWSのインポート
+!includeurl AWSPuml/General/Client.puml
+!includeurl AWSPuml/ManagementAndGovernance/CloudTrail.puml
+!includeurl AWSPuml/General/TraditionalServer.puml
+!includeurl AWSPuml/Storage/SimpleStorageServiceS3.puml
+!includeurl AWSPuml/Compute/Lambda.puml
+
+ClientParticipant(client, Client, Client)
+TraditionalServerParticipant(api_server, API Server,)
+CloudTrailParticipant(cloud_trail, CloudTrail, CloudTrail)
+SimpleStorageServiceS3Participant(s3, S3, S3)
+LambdaParticipant(lambda, Lambda, Lambda)
+
+client -> api_server: RESTful API
+api_server -> cloud_trail
+cloud_trail -> s3
+cloud_trail <- s3
+opt Lambda
+cloud_trail -> lambda
+cloud_trail <- lambda
+end opt
+api_server <- cloud_trail
+client <- api_server: response
+
+
+@enduml
